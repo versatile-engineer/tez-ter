@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Tez Ter</title>
+
+  <style>
+    :root {
+      --bg-main: #0f172a;
+      --bg-card: #111827;
+      --bg-card-light: #1f2937;
+      --bg-input: #020617;
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+      --primary: #38bdf8;
+      --primary-dark: #0284c7;
+      --success: #22c55e;
+      --danger: #ef4444;
+      --warning: #fbbf24;
+      --border: #374151;
+      --shadow: rgba(0, 0, 0, 0.45);
+    }
+
+    body.light {
+      --bg-main: #e0f2fe;
+      --bg-card: #ffffff;
+      --bg-card-light: #f1f5f9;
+      --bg-input: #f8fafc;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --primary: #0284c7;
+      --primary-dark: #0369a1;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --warning: #ca8a04;
+      --border: #cbd5e1;
+      --shadow: rgba(15, 23, 42, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--bg-main), #020617);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 24px;
+      transition: 0.25s ease;
+    }
+
+    body.light {
+      background: linear-gradient(135deg, #e0f2fe, #f8fafc);
+    }
+
+    .app {
+      width: min(100%, 1050px);
+      background: var(--bg-card);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 25px 60px var(--shadow);
+      border: 1px solid var(--border);
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .brand h1 {
+      font-size: 38px;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+
+    .brand p {
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .theme-btn {
+      border: none;
+      background: var(--bg-card-light);
+      color: var(--text-main);
+      border: 1px solid var(--border);
+      padding: 11px 16px;
+      border-radius: 14px;
+      cursor: pointer;
+      font-weight: 700;
+      white-space: nowrap;
+      transition: 0.2s;
+    }
+
+    .theme-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .settings {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .field label {
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: var(--bg-input);
+      color: var(--text-main);
+      border-radius: 14px;
+      padding: 13px 14px;
+      outline: none;
+      font-size: 15px;
+      transition: 0.2s;
+    }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.14);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .stat-card {
+      background: var(--bg-card-light);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 15px 10px;
+      text-align: center;
+    }
+
+    .stat-card h2 {
+      font-size: 28px;
+      color: var(--success);
+      margin-bottom: 5px;
+    }
+
+    .stat-card p {
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .progress-area {
+      margin-bottom: 20px;
+    }
+
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .progress-box {
+      width: 100%;
+      height: 13px;
+      background: var(--bg-card-light);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--success));
+      transition: width 0.15s linear;
+    }
+
+    .typing-card {
+      background: var(--bg-card-light);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+
+    .typing-card-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .sample-text {
+      font-size: clamp(16px, 2.3vw, 21px);
+      line-height: 1.75;
+      color: var(--text-main);
+      user-select: none;
+      word-break: break-word;
+    }
+
+    .char.correct {
+      color: var(--success);
+    }
+
+    .char.incorrect {
+      color: var(--danger);
+      background: rgba(239, 68, 68, 0.16);
+      border-radius: 5px;
+    }
+
+    .char.current {
+      border-bottom: 3px solid var(--primary);
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 145px;
+      resize: vertical;
+      border: 1px solid var(--border);
+      outline: none;
+      background: var(--bg-input);
+      color: var(--text-main);
+      border-radius: 20px;
+      padding: 18px;
+      font-size: clamp(16px, 2.3vw, 18px);
+      line-height: 1.6;
+      margin-bottom: 16px;
+      transition: 0.2s;
+    }
+
+    textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.14);
+    }
+
+    textarea:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    button {
+      border: none;
+      padding: 13px 18px;
+      border-radius: 14px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 800;
+      transition: 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #082f49;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      color: #ffffff;
+    }
+
+    .btn-secondary {
+      background: var(--bg-card-light);
+      color: var(--text-main);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.14);
+      color: var(--danger);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+    }
+
+    .btn-danger:hover {
+      background: var(--danger);
+      color: #ffffff;
+    }
+
+    .hint {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.5;
+      margin-left: auto;
+    }
+
+    .result {
+      display: none;
+      border: 1px solid rgba(34, 197, 94, 0.45);
+      background: rgba(34, 197, 94, 0.10);
+      border-radius: 20px;
+      padding: 18px;
+      margin-bottom: 20px;
+    }
+
+    .result h2 {
+      color: var(--success);
+      margin-bottom: 10px;
+      font-size: 23px;
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .result-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 13px;
+      text-align: center;
+    }
+
+    .result-item strong {
+      display: block;
+      color: var(--primary);
+      font-size: 22px;
+      margin-bottom: 5px;
+    }
+
+    .result-item span {
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .leaderboard {
+      background: var(--bg-card-light);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 20px;
+      overflow-x: auto;
+    }
+
+    .leaderboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .leaderboard h2 {
+      color: var(--warning);
+      font-size: 24px;
+    }
+
+    table {
+      width: 100%;
+      min-width: 760px;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 14px;
+    }
+
+    th,
+    td {
+      padding: 13px 10px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+
+    th {
+      color: var(--primary);
+      background: var(--bg-input);
+    }
+
+    td {
+      color: var(--text-main);
+    }
+
+    .empty {
+      color: var(--text-muted);
+      text-align: center;
+      padding: 18px;
+      line-height: 1.5;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.14);
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    @media (max-width: 950px) {
+      .stats {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .result-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding: 14px;
+      }
+
+      .app {
+        padding: 20px;
+        border-radius: 20px;
+      }
+
+      .top-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .brand h1 {
+        text-align: center;
+        font-size: 34px;
+      }
+
+      .brand p {
+        text-align: center;
+      }
+
+      .theme-btn {
+        width: 100%;
+      }
+
+      .settings {
+        grid-template-columns: 1fr;
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .typing-card {
+        padding: 16px;
+      }
+
+      .typing-card-header {
+        flex-direction: column;
+      }
+
+      textarea {
+        min-height: 125px;
+      }
+
+      .actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .actions button {
+        width: 100%;
+      }
+
+      .hint {
+        margin-left: 0;
+        text-align: center;
+      }
+
+      .leaderboard-header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .leaderboard-header button {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 430px) {
+      body {
+        padding: 10px;
+      }
+
+      .app {
+        padding: 15px;
+        border-radius: 16px;
+      }
+
+      .brand h1 {
+        font-size: 30px;
+      }
+
+      .brand p {
+        font-size: 14px;
+      }
+
+      .stats {
+        gap: 9px;
+      }
+
+      .stat-card {
+        padding: 12px 6px;
+        border-radius: 15px;
+      }
+
+      .stat-card h2 {
+        font-size: 22px;
+      }
+
+      .stat-card p {
+        font-size: 12px;
+      }
+
+      .sample-text {
+        line-height: 1.65;
+      }
+
+      .result-grid {
+        grid-template-columns: 1fr;
+      }
+
+      th,
+      td {
+        padding: 10px 8px;
+        font-size: 13px;
+      }
+    }
+
+    @media (max-width: 340px) {
+      .stats {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="app">
+    <div class="top-bar">
+      <div class="brand">
+        <h1>Tez Ter</h1>
+        <p>
+          60 soniyada yozish tezligingizni sinab ko‘ring. Xatolar, aniqlik va tezlik real vaqt rejimida hisoblanadi.
+        </p>
+      </div>
+
+      <button class="theme-btn" id="themeBtn" type="button">
+        Yorug‘ rejim
+      </button>
+    </div>
+
+    <section class="settings">
+      <div class="field">
+        <label for="userName">Ismingiz</label>
+        <input 
+          type="text" 
+          id="userName" 
+          placeholder="Masalan: Shohrux" 
+          maxlength="24"
+        />
+      </div>
+
+      <div class="field">
+        <label for="durationSelect">Vaqt rejimi</label>
+        <select id="durationSelect">
+          <option value="30">30 soniya</option>
+          <option value="60" selected>60 soniya</option>
+          <option value="120">120 soniya</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="levelSelect">Matn darajasi</label>
+        <select id="levelSelect">
+          <option value="easy">Oson</option>
+          <option value="medium" selected>O‘rta</option>
+          <option value="hard">Qiyin</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="stats">
+      <div class="stat-card">
+        <h2 id="time">60</h2>
+        <p>Vaqt</p>
+      </div>
+
+      <div class="stat-card">
+        <h2 id="wpm">0</h2>
+        <p>So‘z/daq</p>
+      </div>
+
+      <div class="stat-card">
+        <h2 id="cpm">0</h2>
+        <p>Belgi/daq</p>
+      </div>
+
+      <div class="stat-card">
+        <h2 id="accuracy">100%</h2>
+        <p>To‘g‘rilik</p>
+      </div>
+
+      <div class="stat-card">
+        <h2 id="errors">0</h2>
+        <p>Xatolar</p>
+      </div>
+
+      <div class="stat-card">
+        <h2 id="typed">0</h2>
+        <p>Yozilgan</p>
+      </div>
+    </section>
+
+    <section class="progress-area">
+      <div class="progress-info">
+        <span id="statusText">Boshlash uchun matnni yozishni boshlang</span>
+        <span id="progressText">0%</span>
+      </div>
+
+      <div class="progress-box">
+        <div class="progress" id="progress"></div>
+      </div>
+    </section>
+
+    <section class="typing-card">
+      <div class="typing-card-header">
+        <span>Namuna matn</span>
+        <span id="textInfo">0 belgi</span>
+      </div>
+
+      <div class="sample-text" id="sampleText"></div>
+    </section>
+
+    <textarea
+      id="typingInput"
+      placeholder="Matnni shu yerga yozishni boshlang..."
+      autocomplete="off"
+      autocorrect="off"
+      autocapitalize="off"
+      spellcheck="false"
+    ></textarea>
+
+    <section class="actions">
+      <button class="btn-primary" id="startBtn" type="button">
+        Boshlash
+      </button>
+
+      <button class="btn-secondary" id="restartBtn" type="button">
+        Qayta boshlash
+      </button>
+
+      <button class="btn-secondary" id="copyBtn" type="button">
+        Natijani nusxalash
+      </button>
+
+      <span class="hint">
+        Tezkor tugmalar: Enter — qayta boshlash, Bo‘sh joy — yozish maydoniga o‘tish
+      </span>
+    </section>
+
+    <section class="result" id="resultBox">
+      <h2>Yakuniy natija</h2>
+      <p id="finalMessage"></p>
+
+      <div class="result-grid">
+        <div class="result-item">
+          <strong id="resultWpm">0</strong>
+          <span>So‘z/daq</span>
+        </div>
+
+        <div class="result-item">
+          <strong id="resultCpm">0</strong>
+          <span>Belgi/daq</span>
+        </div>
+
+        <div class="result-item">
+          <strong id="resultAccuracy">100%</strong>
+          <span>To‘g‘rilik</span>
+        </div>
+
+        <div class="result-item">
+          <strong id="resultErrors">0</strong>
+          <span>Xatolar</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="leaderboard">
+      <div class="leaderboard-header">
+        <h2>Eng yaxshi 5 ta natija</h2>
+
+        <button class="btn-danger" id="clearResultsBtn" type="button">
+          Natijalarni tozalash
+        </button>
+      </div>
+
+      <div id="leaderboardContent"></div>
+    </section>
+  </main>
+
+  <script>
+    const STORAGE_RESULTS_KEY = "tezTerNatijalariV2";
+    const STORAGE_THEME_KEY = "tezTerMavzu";
+
+    const texts = {
+      easy: [
+        "Bugun havo yaxshi. Men kompyuterda matn yozishni mashq qilyapman.",
+        "Tez yozish uchun har kuni ozgina mashq qilish kerak.",
+        "Klaviaturada to‘g‘ri va aniq yozish foydali ko‘nikma hisoblanadi.",
+        "Men yangi veb loyiha yaratdim va uni sinab ko‘ryapman."
+      ],
+
+      medium: [
+        "Dasturlash insonning mantiqiy fikrlash qobiliyatini rivojlantiradi va muammolarni samarali hal qilishga yordam beradi.",
+        "JavaScript yordamida interaktiv veb sahifalar yaratish mumkin. Har bir kiritilgan belgi real vaqt rejimida tekshiriladi.",
+        "Tez va aniq yozish ko‘nikmasi zamonaviy texnologiyalar davrida juda muhim hisoblanadi.",
+        "Frontend dasturlashda HTML sahifa tuzilmasi, CSS dizayn, JavaScript esa interaktivlik uchun ishlatiladi."
+      ],
+
+      hard: [
+        "Dasturchi uchun tez yozish faqat qulaylik emas, balki fikrni tez ifodalash va kod yozish jarayonida samaradorlikni oshirish vositasidir.",
+        "Zamonaviy veb ilovalarda foydalanuvchi tajribasi, moslashuvchan dizayn, xavfsizlik va tezkor ishlash bir xil darajada muhim hisoblanadi.",
+        "Algoritmik fikrlash, mantiqiy tahlil va doimiy amaliyot dasturlash sohasida yuqori natijaga erishishning asosiy omillaridan biridir.",
+        "Mobil qurilmalarga mos interfeys yaratishda elementlar o‘lchami, matn o‘qilishi, tugmalar joylashuvi va sahifa tezligi alohida e’tiborga olinadi."
+      ]
+    };
+
+    const userNameInput = document.getElementById("userName");
+    const durationSelect = document.getElementById("durationSelect");
+    const levelSelect = document.getElementById("levelSelect");
+
+    const themeBtn = document.getElementById("themeBtn");
+    const timeElement = document.getElementById("time");
+    const wpmElement = document.getElementById("wpm");
+    const cpmElement = document.getElementById("cpm");
+    const accuracyElement = document.getElementById("accuracy");
+    const errorsElement = document.getElementById("errors");
+    const typedElement = document.getElementById("typed");
+
+    const statusText = document.getElementById("statusText");
+    const progressText = document.getElementById("progressText");
+    const progressElement = document.getElementById("progress");
+    const textInfo = document.getElementById("textInfo");
+    const sampleTextElement = document.getElementById("sampleText");
+    const typingInput = document.getElementById("typingInput");
+
+    const startBtn = document.getElementById("startBtn");
+    const restartBtn = document.getElementById("restartBtn");
+    const copyBtn = document.getElementById("copyBtn");
+    const clearResultsBtn = document.getElementById("clearResultsBtn");
+
+    const resultBox = document.getElementById("resultBox");
+    const finalMessage = document.getElementById("finalMessage");
+    const resultWpm = document.getElementById("resultWpm");
+    const resultCpm = document.getElementById("resultCpm");
+    const resultAccuracy = document.getElementById("resultAccuracy");
+    const resultErrors = document.getElementById("resultErrors");
+    const leaderboardContent = document.getElementById("leaderboardContent");
+
+    let currentText = "";
+    let duration = 60;
+    let timerId = null;
+    let startTime = null;
+    let isStarted = false;
+    let isFinished = false;
+    let lastResultText = "";
+
+    function getRandomText() {
+      const level = levelSelect.value;
+      const list = texts[level];
+      const randomIndex = Math.floor(Math.random() * list.length);
+
+      return list[randomIndex];
+    }
+
+    function getUserName() {
+      const name = userNameInput.value.trim();
+
+      return name.length > 0 ? name : "Mehmon";
+    }
+
+    function renderSampleText(input = "") {
+      sampleTextElement.innerHTML = "";
+
+      currentText.split("").forEach((char, index) => {
+        const span = document.createElement("span");
+        span.textContent = char;
+        span.classList.add("char");
+
+        if (index < input.length) {
+          if (input[index] === char) {
+            span.classList.add("correct");
+          } else {
+            span.classList.add("incorrect");
+          }
+        }
+
+        if (index === input.length && !isFinished) {
+          span.classList.add("current");
+        }
+
+        sampleTextElement.appendChild(span);
+      });
+
+      textInfo.textContent = `${currentText.length} belgi`;
+    }
+
+    function calculateStats() {
+      const input = typingInput.value;
+      let correctChars = 0;
+
+      for (let i = 0; i < input.length; i++) {
+        if (input[i] === currentText[i]) {
+          correctChars++;
+        }
+      }
+
+      const typedChars = input.length;
+      const errors = typedChars - correctChars;
+
+      let elapsedSeconds = 0;
+
+      if (isStarted && startTime) {
+        elapsedSeconds = Math.max((Date.now() - startTime) / 1000, 1);
+      }
+
+      const elapsedMinutes = elapsedSeconds > 0 ? elapsedSeconds / 60 : 1 / 60;
+
+      const wpm = isStarted
+        ? Math.round((correctChars / 5) / elapsedMinutes)
+        : 0;
+
+      const cpm = isStarted
+        ? Math.round(correctChars / elapsedMinutes)
+        : 0;
+
+      const accuracy = typedChars > 0
+        ? Math.round((correctChars / typedChars) * 100)
+        : 100;
+
+      return {
+        wpm: Math.max(wpm, 0),
+        cpm: Math.max(cpm, 0),
+        accuracy: Math.max(accuracy, 0),
+        errors: Math.max(errors, 0),
+        correctChars,
+        typedChars
+      };
+    }
+
+    function updateStats() {
+      const stats = calculateStats();
+
+      wpmElement.textContent = stats.wpm;
+      cpmElement.textContent = stats.cpm;
+      accuracyElement.textContent = `${stats.accuracy}%`;
+      errorsElement.textContent = stats.errors;
+      typedElement.textContent = stats.typedChars;
+    }
+
+    function updateTimer() {
+      if (!isStarted || isFinished) return;
+
+      const elapsedSeconds = (Date.now() - startTime) / 1000;
+      const remainingSeconds = Math.max(0, Math.ceil(duration - elapsedSeconds));
+      const progressPercent = Math.min(100, Math.round((elapsedSeconds / duration) * 100));
+
+      timeElement.textContent = remainingSeconds;
+      progressElement.style.width = `${progressPercent}%`;
+      progressText.textContent = `${progressPercent}%`;
+
+      updateStats();
+
+      if (elapsedSeconds >= duration) {
+        finishTest("Vaqt tugadi");
+      }
+    }
+
+    function startTest() {
+      if (isFinished) return;
+
+      if (!isStarted) {
+        isStarted = true;
+        startTime = Date.now();
+        statusText.textContent = "Test boshlandi";
+        timerId = setInterval(updateTimer, 200);
+      }
+
+      typingInput.focus();
+    }
+
+    function finishTest(reason) {
+      if (isFinished) return;
+
+      isFinished = true;
+      isStarted = false;
+
+      clearInterval(timerId);
+      timerId = null;
+
+      typingInput.disabled = true;
+      progressElement.style.width = "100%";
+      progressText.textContent = "100%";
+      timeElement.textContent = "0";
+      statusText.textContent = reason;
+
+      const stats = calculateStats();
+
+      resultWpm.textContent = stats.wpm;
+      resultCpm.textContent = stats.cpm;
+      resultAccuracy.textContent = `${stats.accuracy}%`;
+      resultErrors.textContent = stats.errors;
+
+      const userName = getUserName();
+      const levelText = levelSelect.options[levelSelect.selectedIndex].textContent;
+      const durationText = durationSelect.options[durationSelect.selectedIndex].textContent;
+
+      finalMessage.innerHTML = `
+        <strong>${userName}</strong>, test yakunlandi.
+        Rejim: <strong>${durationText}</strong>,
+        daraja: <strong>${levelText}</strong>.
+      `;
+
+      resultBox.style.display = "block";
+
+      lastResultText =
+        `Tez Ter natijam:\n` +
+        `Ism: ${userName}\n` +
+        `So‘z/daq: ${stats.wpm}\n` +
+        `Belgi/daq: ${stats.cpm}\n` +
+        `To‘g‘rilik: ${stats.accuracy}%\n` +
+        `Xatolar: ${stats.errors}\n` +
+        `Rejim: ${durationText}\n` +
+        `Daraja: ${levelText}`;
+
+      if (stats.typedChars > 0) {
+        saveResult(stats);
+        renderLeaderboard();
+      }
+    }
+
+    function saveResult(stats) {
+      const oldResults = JSON.parse(localStorage.getItem(STORAGE_RESULTS_KEY)) || [];
+
+      const newResult = {
+        name: getUserName(),
+        wpm: stats.wpm,
+        cpm: stats.cpm,
+        accuracy: stats.accuracy,
+        errors: stats.errors,
+        duration: `${duration} soniya`,
+        level: levelSelect.options[levelSelect.selectedIndex].textContent,
+        date: new Date().toLocaleString("uz-UZ")
+      };
+
+      oldResults.push(newResult);
+
+      oldResults.sort((a, b) => {
+        if (b.wpm !== a.wpm) return b.wpm - a.wpm;
+        if (b.accuracy !== a.accuracy) return b.accuracy - a.accuracy;
+        return a.errors - b.errors;
+      });
+
+      const topFive = oldResults.slice(0, 5);
+
+      localStorage.setItem(STORAGE_RESULTS_KEY, JSON.stringify(topFive));
+    }
+
+    function renderLeaderboard() {
+      const results = JSON.parse(localStorage.getItem(STORAGE_RESULTS_KEY)) || [];
+
+      if (results.length === 0) {
+        leaderboardContent.innerHTML = `
+          <p class="empty">
+            Hali natijalar mavjud emas. Testni yakunlaganingizdan so‘ng eng yaxshi natijalar shu yerda ko‘rinadi.
+          </p>
+        `;
+        return;
+      }
+
+      let html = `
+        <table>
+          <thead>
+            <tr>
+              <th>O‘rin</th>
+              <th>Ism</th>
+              <th>So‘z/daq</th>
+              <th>Belgi/daq</th>
+              <th>To‘g‘rilik</th>
+              <th>Xatolar</th>
+              <th>Rejim</th>
+              <th>Daraja</th>
+              <th>Sana</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      results.forEach((result, index) => {
+        const badge = index === 0 ? `<span class="badge">Eng yaxshi</span>` : "";
+
+        html += `
+          <tr>
+            <td>${index + 1} ${badge}</td>
+            <td>${result.name}</td>
+            <td>${result.wpm}</td>
+            <td>${result.cpm}</td>
+            <td>${result.accuracy}%</td>
+            <td>${result.errors}</td>
+            <td>${result.duration}</td>
+            <td>${result.level}</td>
+            <td>${result.date}</td>
+          </tr>
+        `;
+      });
+
+      html += `
+          </tbody>
+        </table>
+      `;
+
+      leaderboardContent.innerHTML = html;
+    }
+
+    function resetTest() {
+      clearInterval(timerId);
+
+      duration = Number(durationSelect.value);
+      currentText = getRandomText();
+
+      timerId = null;
+      startTime = null;
+      isStarted = false;
+      isFinished = false;
+      lastResultText = "";
+
+      typingInput.value = "";
+      typingInput.disabled = false;
+
+      timeElement.textContent = duration;
+      wpmElement.textContent = "0";
+      cpmElement.textContent = "0";
+      accuracyElement.textContent = "100%";
+      errorsElement.textContent = "0";
+      typedElement.textContent = "0";
+
+      progressElement.style.width = "0%";
+      progressText.textContent = "0%";
+      statusText.textContent = "Boshlash uchun matnni yozishni boshlang";
+
+      resultBox.style.display = "none";
+
+      renderSampleText();
+      typingInput.focus();
+    }
+
+    function clearResults() {
+      const isConfirmed = confirm("Hamma saqlangan natijalarni o‘chirmoqchimisiz?");
+
+      if (!isConfirmed) return;
+
+      localStorage.removeItem(STORAGE_RESULTS_KEY);
+      renderLeaderboard();
+    }
+
+    async function copyResult() {
+      if (!lastResultText) {
+        alert("Hali nusxalanadigan natija yo‘q. Avval testni yakunlang.");
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(lastResultText);
+        alert("Natija nusxalandi.");
+      } catch (error) {
+        alert("Brauzer natijani avtomatik nusxalay olmadi.");
+      }
+    }
+
+    function applyTheme(theme) {
+      if (theme === "light") {
+        document.body.classList.add("light");
+        themeBtn.textContent = "Qorong‘i rejim";
+      } else {
+        document.body.classList.remove("light");
+        themeBtn.textContent = "Yorug‘ rejim";
+      }
+
+      localStorage.setItem(STORAGE_THEME_KEY, theme);
+    }
+
+    function toggleTheme() {
+      const isLight = document.body.classList.contains("light");
+      applyTheme(isLight ? "dark" : "light");
+    }
+
+    function loadTheme() {
+      const savedTheme = localStorage.getItem(STORAGE_THEME_KEY) || "dark";
+      applyTheme(savedTheme);
+    }
+
+    typingInput.addEventListener("input", () => {
+      if (!isStarted && !isFinished) {
+        startTest();
+      }
+
+      if (typingInput.value.length > currentText.length) {
+        typingInput.value = typingInput.value.slice(0, currentText.length);
+      }
+
+      renderSampleText(typingInput.value);
+      updateStats();
+
+      if (typingInput.value.length === currentText.length) {
+        finishTest("Matn yakunlandi");
+      }
+    });
+
+    startBtn.addEventListener("click", startTest);
+    restartBtn.addEventListener("click", resetTest);
+    clearResultsBtn.addEventListener("click", clearResults);
+    copyBtn.addEventListener("click", copyResult);
+    themeBtn.addEventListener("click", toggleTheme);
+
+    durationSelect.addEventListener("change", resetTest);
+    levelSelect.addEventListener("change", resetTest);
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        resetTest();
+      }
+
+      if (event.code === "Space" && document.activeElement !== typingInput) {
+        event.preventDefault();
+        typingInput.focus();
+      }
+    });
+
+    loadTheme();
+    resetTest();
+    renderLeaderboard();
+  </script>
+</body>
+</html>
